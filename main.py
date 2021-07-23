@@ -190,7 +190,7 @@ def get_daily_images():
     max_num = request.form.get('max_num')
     date = datetime.datetime.strptime(date, "%Y-%m-%d")
     date_next = date + datetime.timedelta(days=1)
-    sql = "SELECT image_path FROM meals WHERE user_id='%s' AND create_time BETWEEN '%s' AND '%s'" % (
+    sql = "SELECT image_path FROM meals WHERE valid='1' AND user_id='%s' AND create_time BETWEEN '%s' AND '%s'" % (
     user_id, date.strftime("%Y-%m-%d"), date_next.strftime("%Y-%m-%d"))
     print(sql)
     image_paths = db.select_db(sql)
