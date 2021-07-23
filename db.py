@@ -41,10 +41,12 @@ class MysqlDb:
             self.cur.execute(sql)
             # 提交事务
             self.conn.commit()
+            return "Success"
         except Exception as e:
             print("操作出现错误：{}".format(e))
             # 回滚所有更改
             self.conn.rollback()
+            return str(e)
 
 
 db = MysqlDb(MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASSWD, MYSQL_DB)

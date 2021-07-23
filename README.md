@@ -74,3 +74,130 @@ date: 2021-07-22
 }
 ```
 
+## 用户注册
+
+POST
+
+```
+email: <string>
+passwd: <string>
+nickname: <string>(default:'')
+age: <int>(default:0)
+calories_limit: <double>(default:8400)
+fat_limit: <double>(default:60)
+protein_limit: <double>(default:60)
+carbs_limit: <double>(default:300)
+```
+
+发送至http://8.130.49.155:5000/sign_up
+
+```
+{
+    "result": "Email exists"
+}
+{
+    "result": "Success"
+}
+```
+
+
+
+## 用户登录
+
+POST
+
+```
+email: <string>
+passwd: <string>
+```
+
+发送至http://8.130.49.155:5000/login
+
+```
+{
+    "info": {
+        "age": 0,
+        "calories_limit": 8400.0,
+        "carbs_limit": 300.0,
+        "email": "test@qq.com",
+        "fat_limit": 60.0,
+        "id": 1,
+        "nickname": "haha",
+        "passwd": "123456",
+        "protein_limit": 60.0
+    },
+    "result": "Success"
+}
+
+{
+    "info": "",
+    "result": "Wrong password"
+}
+
+{
+    "info": "",
+    "result": "No such user"
+}
+```
+
+## 获取用户信息
+
+POST
+
+```
+email: <string>
+```
+
+发送至http://8.130.49.155:5000/get_user_info
+
+```
+{
+    "info": {
+        "age": 0,
+        "calories_limit": 8400.0,
+        "carbs_limit": 300.0,
+        "email": "test@qq.com",
+        "fat_limit": 60.0,
+        "id": 1,
+        "nickname": "haha",
+        "passwd": "123456",
+        "protein_limit": 60.0
+    },
+    "result": "Success"
+}
+
+{
+    "info": "",
+    "result": "No such user"
+}
+```
+
+## 修改用户信息
+
+POST
+
+```
+email: <string>
+passwd: <string>
+nickname: <string>(optional)
+age: <int>(optional)
+calories_limit: <double>(optional)
+fat_limit: <double>(optional)
+protein_limit: <double>(optional)
+carbs_limit: <double>(optional)
+```
+
+发送至http://8.130.49.155:5000/get_user_info
+
+```
+{
+    "result": "No such user"
+}
+
+{
+    "result": "Success"
+}
+```
+
+
+

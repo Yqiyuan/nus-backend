@@ -23,6 +23,91 @@ api_instance = spoonacular.DefaultApi(spoonacular.ApiClient(configuration))
 ip = requests.get('https://checkip.amazonaws.com').text.strip()
 
 
+@app.route('/sign_up', methods=['POST'])
+def sign_up():
+    email = request.form['email']
+    passwd = request.form['passwd']
+    nickname = request.form.get('nickname', default=email)
+    age = request.form.get('age', default='0')
+    calories_limit = request.form.get('calories_limit', default='8400')
+    fat_limit = request.form.get('fat_limit', default='60')
+    protein_limit = request.form.get('protein_limit', default='60')
+    carbs_limit = request.form.get('carbs_limit', default='300')
+    sql_check = "SELECT passwd FROM user " \
+          "WHERE email='%s'" % (email)
+    check_result = db.select_db(sql_check)
+    if len(check_result) > 0:
+        return {'result': 'Email exists'}
+    sql = "INSERT INTO user (email, passwd, nickname, age, calories_limit, fat_limit, protein_limit, carbs_limit)" \
+          "VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s') " % (email, passwd, nickname, age, calories_limit,
+                                                                        fat_limit, protein_limit, carbs_limit)
+
+    result = db.execute_db(sql)
+    return {'result': result}
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    email = request.form['email']
+    passwd = request.form['passwd']
+    response = {
+        'result': '',
+        'info': ''
+    }
+    sql = "SELECT * FROM user " \
+          "WHERE email='%s'" % (email)
+    result = db.select_db(sql)
+    if len(result) == 0:
+        response['result'] = 'No such user'
+    elif result[0]['passwd'] != passwd:
+        response['result'] = 'Wrong password'
+    else:
+        response['result'] = 'Success'
+        response['info'] = result[0]
+    return response
+
+@app.route('/get_user_info', methods=['POST'])
+def get_user_info():
+    email = request.form['email']
+    response = {
+        'result': '',
+        'info': ''
+    }
+    sql = "SELECT * FROM user " \
+          "WHERE email='%s'" % (email)
+    result = db.select_db(sql)
+    if len(result) == 0:
+        response['result'] = 'No such user'
+    else:
+        response['result'] = 'Success'
+        response['info'] = result[0]
+    return response
+
+@app.route('/update_user_info', methods=['POST'])
+def update_user_info():
+    email = request.form['email']
+    check_sql = "SELECT * FROM user " \
+          "WHERE email='%s'" % (email)
+    check_results = db.select_db(check_sql)
+    if len(check_results) == 0:
+        return {'result': 'No such user'}
+    check_result = check_results[0]
+    passwd = request.form.get('passwd', default=check_result['passwd'])
+    nickname = request.form.get('nickname', default=check_result['nickname'])
+    age = request.form.get('age', default=check_result['age'])
+    calories_limit = request.form.get('calories_limit', default=check_result['calories_limit'])
+    fat_limit = request.form.get('fat_limit', default=check_result['fat_limit'])
+    protein_limit = request.form.get('protein_limit', default=check_result['protein_limit'])
+    carbs_limit = request.form.get('carbs_limit', default=check_result['carbs_limit'])
+    sql = "UPDATE user " \
+          "SET passwd='%s', nickname='%s', age='%s', calories_limit='%s', fat_limit='%s', protein_limit='%s', carbs_limit='%s' WHERE email='%s'" % (
+        passwd, nickname, age, calories_limit, fat_limit, protein_limit, carbs_limit, email
+    )
+    result = db.execute_db(sql)
+    return {'result': result}
+
+
+
 @app.route('/images/<filename>', methods=['GET'])
 def get_image(filename):
     path = image_save_path / filename
