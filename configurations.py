@@ -1,5 +1,7 @@
 # 服务端口配置
-SERVER_PORT = 9999
+SERVER_PORT = 5000
+IMAGE_SAVE_PATH = '/home/root/backend/images'
+API_TOKEN = 'cf2b2f60e4f64dcfaf2ea8c7a1b9f2e1'
 
 # MySQL配置
 MYSQL_HOST = "localhost"

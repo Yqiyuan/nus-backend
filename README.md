@@ -1,39 +1,76 @@
-## 查询图片
+## 分析图片
 
 POST包 在body段使用form-data形式建立键值对
 
-file: <图片文件>
+```
+file: <图片文件的base64字符串>
 
-user_id: <10位的user_id>
+user_id: <int类型的user_id>
+```
 
-发送至http://<目标ip>:5000/upload
+发送至http://8.130.49.155:5000/upload
 
-返回图片查询的详细信息
+```
+response = {
+        'id': '1',
+        'name': 'burger',
+        'nutrition': {
+            'calories': '100',
+            'fat': '100',
+            'protein': '100',
+            'carbs': '100'
+        }
+    }
+```
 
 同时在数据库历史表内生成新记录
 
-(记录编号(自动累加的INT)，user_id, date(标准日期格式, 相当于YYYY-MM-DD的字符串), 以base64保存的查询记录)
 
-## 查询记录
+## 查询某一天的食物图片
 
 POST包 在body段内使用form-data形式建立键值对
 
-user_id: <10位的user_id>
+```
+user_id: <int类型的user_id>
 
 date: <YYYY-MM-DD的字符串>
 
-发送至http://<目标ip>:5000/history
+max_num: <大于1>返回的最大数量(optional)
+```
 
-返回用户在该日期查询的历史记录项的编号表
+发送至http://8.130.49.155:5000/get_daily_images
 
-json格式
+```
+user_id: 1
+date: 2021-07-22
 
-## 查询记录项
+{
+    "image_amount": 1,
+    "images": [base64]
+}
+```
+
+## 查询某一天的总营养
 
 POST包 在body段内使用form-data形式建立键值对
 
-h_id: <表项编号>
+```
+user_id: <int类型的user_id>
 
-发送至http://<目标ip>:5000/search
+date: <YYYY-MM-DD的字符串>
+```
 
-返回经过base64编码的对应的查询记录
+发送至http://8.130.49.155:5000/get_daily_nutrition
+
+```
+user_id: 1
+date: 2021-07-22
+
+{
+    "calories": 449.0,
+    "carbs": 17.0,
+    "fat": 18.0,
+    "protein": 41.0
+}
+```
+
